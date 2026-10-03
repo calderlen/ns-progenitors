@@ -3,19 +3,16 @@ from scipy.special import logsumexp
 from scipy.stats import norm
 
 
-def object_loglikelihoods(observed, errors, model_masses, weights) -> np.ndarray:
-    observed, errors, model_masses, weights = (
-        np.asarray(values, dtype=float)
-        for values in (observed, errors, model_masses, weights)
-    )
+def object_loglikelihoods(data, errors, model, weights) -> np.ndarray:
+    # converting the inputs to numpy arrays
+    data, errors, model, weights = (np.asarray(values, dtype=float) for values in (observed, errors, model_masses, weights))
+    # selecting all positive weights
     positive = weights > 0
-    terms = norm.logpdf(
-        observed[:, None],
-        loc=model_masses[None, positive],
-        scale=errors[:, None],
-    )
+    # probability density of data D given model M 
+    terms = norm.logpdf(data[:, None], loc=model[None, positive], scale=errors[:, None],)
+    
     return logsumexp(terms + np.log(weights[positive])[None, :], axis=1)
 
 
-def loglikelihood(observed, errors, model_masses, weights) -> float:
-    return float(object_loglikelihoods(observed, errors, model_masses, weights).sum())
+def loglikelihood(data, errors, model, weights) -> float:
+    return float(object_loglikelihoods(data, errors, model, weights).sum())
