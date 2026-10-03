@@ -1,0 +1,13 @@
+file,status,priority,purpose
+gaia2024_analysis_master.csv,AVAILABLE,required,Convenient joined observational table for likelihood and survival modeling
+gaia2024_ns_sample_basic.csv,AVAILABLE,required,El-Badry+2024 Table 1: masses/errors and basic orbital data
+gaia2024_luminous_star_properties.csv,AVAILABLE,required_for_metallicity,El-Badry+2024 Table 2: metallicities and SED stellar properties
+gaia2024_candidate_followup_universe.csv,AVAILABLE,required_for_selection,El-Badry+2024 Table 3: candidate pool/follow-up status
+gaia2024_orbit_fits.csv,AVAILABLE,required_for_survival_model,El-Badry+2024 Table 4: joint astrometry+RV orbit parameters
+gaia2024_selection_cuts.csv,AVAILABLE,required_for_selection,Explicit selection requirements extracted from the paper
+ertl2020_progenitor_grid.csv,AVAILABLE,required,"Ertl+2020 machine-readable Table 1, 209 progenitor models"
+ertl2020_remnant_outputs_REQUIRED_TEMPLATE.csv,DATA MISSING,required,Join Garching model-by-model remnant outcomes here; five central engines pre-expanded
+ertl2020_ns_mass_averages_validation.csv,AVAILABLE,validation,Ertl+2020 Table 3; use to validate IMF weighting/reconstruction
+ertl2020_engine_separation_coefficients.csv,AVAILABLE,optional,Ertl+2020 Table 10; useful only for approximate explodability classification
+pejcha2012_dns_sample_historical.csv,AVAILABLE,benchmark,Original Pejcha+2012 DNS sample for reproduction/historical control
+missing_inputs_and_next_downloads.csv,AVAILABLE,planning,Lists inputs still required or recommended for a publication-grade analysis
