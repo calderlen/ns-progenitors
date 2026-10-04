@@ -51,3 +51,12 @@ then P's and Q's paper gives
 
 P(q,P,e | M_1,zams)
 
+
+
+
+
+
+
+ok now for the Gaia NSS catalog selection function, it consists of 
+
+Mass of neutron star, mass of main sequency star, orbital period, eccentricity, right ascension, declination, distance/parallax, Gaia G band mag of main sequence star, Gaia G band mag of NS -- effectively negligible for an ordinary NS

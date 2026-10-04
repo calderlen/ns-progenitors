@@ -1,0 +1,402 @@
+POSYDON config map
+
+- environment_variables
+  - PATH_TO_POSYDON
+    - path to the POSYDON code installation
+    - infrastructure only; usually leave alone
+
+- flow
+  - chooses which evolution step runs next based on the current binary/star states
+  - import
+    - built-in POSYDON flow chart
+  - absolute_import
+    - lets you replace the flow chart with custom code
+  - usually leave this section alone
+
+- step_HMS_HMS
+  - evolves two hydrogen-rich stars using the HMS-HMS MESA grid
+  - interpolation_path / interpolation_filename
+    - where the interpolator files live; None uses defaults
+  - interpolation_method
+    - how POSYDON interpolates between precomputed MESA models
+    - options include nearest_neighbour, linear3c_kNN, 1NN_1NN
+  - save_initial_conditions
+    - keep requested initial conditions when relevant
+  - track_interpolation
+    - save interpolation diagnostics
+  - stop_method
+    - when this evolution step should stop
+  - stop_star / stop_var_name / stop_value / stop_interpolate
+    - only relevant for custom stop conditions
+  - verbose
+    - extra output
+  - mostly numerical/control settings
+
+- step_CO_HeMS
+  - evolves compact object + helium star systems
+  - same main interpolation and stopping controls as step_HMS_HMS
+
+- step_CO_HMS_RLO
+  - evolves compact object + H-rich donor undergoing Roche-lobe overflow
+  - same main interpolation and stopping controls
+
+- step_CO_HeMS_RLO
+  - evolves compact object + helium-star donor undergoing Roche-lobe overflow
+  - same main interpolation and stopping controls
+
+- step_detached
+  - evolves detached binaries between strong interaction events
+  - do_wind_loss
+    - include stellar winds
+  - do_tides
+    - include tidal angular-momentum exchange
+  - do_gravitational_radiation
+    - include orbital losses from gravitational waves
+  - do_magnetic_braking
+    - include magnetic-braking angular-momentum loss
+  - magnetic_braking_mode
+    - magnetic-braking prescription: RVJ83, M15, G18, CARB
+  - do_stellar_evolution_and_spin_from_winds
+    - let winds affect stellar evolution and spin
+  - matching_method
+    - how a synthetic star is matched onto stellar tracks
+  - matching_tolerance / matching_tolerance_hard
+    - numerical tolerances for that matching
+  - record_matching / verbose / verbose_matching
+    - diagnostics
+  - important physics here: winds and tides
+  - usually leave matching tolerances alone
+
+- step_disrupted
+  - handles systems after the binary is unbound
+  - tides, gravitational radiation, and magnetic braking are normally off
+  - stellar evolution can still continue
+  - for your project, disrupted systems do not become surviving Gaia NS+MS binaries
+
+- step_merged
+  - handles merger products
+  - matches the merged star onto an appropriate single-star track
+  - list_for_matching_HMS
+    - matching variables for H-rich main-sequence merger products
+  - list_for_matching_postMS
+    - matching variables for evolved H-rich merger products
+  - list_for_matching_HeStar
+    - matching variables for helium-star merger products
+  - usually leave alone unless merger physics becomes important
+
+- step_initially_single
+  - handles systems born as single stars
+  - uses similar stellar-track matching machinery
+  - not central if you intentionally simulate binaries only
+
+- step_CE
+  - common-envelope evolution
+  - prescription
+    - currently alpha-lambda energy formalism
+  - common_envelope_efficiency
+    - alpha_CE; efficiency of using orbital energy to eject the envelope
+    - important science knob
+  - common_envelope_option_for_lambda
+    - how envelope binding parameter lambda is calculated
+    - options include fixed lambda, grid values, or profile-based values
+    - important science knob
+  - common_envelope_lambda_default
+    - constant lambda if that option is chosen
+  - common_envelope_option_for_HG_star
+    - optimistic or pessimistic treatment of Hertzsprung-gap donors
+    - important science knob
+  - common_envelope_alpha_thermal
+    - contribution of thermal/internal energy when relevant
+  - core_definition_H_fraction
+    - H abundance threshold used to define the core boundary
+  - core_definition_He_fraction
+    - He abundance threshold used to define the core boundary
+  - CEE_tolerance_err
+    - numerical tolerance
+  - common_envelope_option_after_succ_CEE
+    - how POSYDON treats the system immediately after successful envelope ejection
+  - CE assumptions can strongly change merger rates and post-CE periods
+
+- step_SN
+  - core-collapse / supernova / compact-remnant step
+  - mechanism
+    - chooses the remnant prescription
+    - examples: Fryer+12-rapid, Fryer+12-delayed, Sukhbold+16-engine, Patton&Sukhbold20-engine, Couch+20-engine, Maltsev+25-engine
+    - major science knob
+  - engine
+    - chooses the particular explosion calibration for mechanisms with multiple engines
+    - examples: N20, W20, W18, W15, S19.8
+    - major science knob
+  - PISN
+    - pair-instability prescription
+  - PISN_CO_shift
+    - shift in the CO-core threshold for the chosen PISN model
+  - PPI_extra_mass_loss
+    - extra mass loss from pulsational pair instability
+  - ECSN
+    - electron-capture supernova prescription
+    - examples: Tauris+15, Podsiadlowski+04
+  - conserve_hydrogen_envelope
+    - whether to retain the H envelope in relevant collapse/remnant calculations
+  - conserve_hydrogen_PPI
+    - analogous choice for PPI treatment
+  - max_neutrino_mass_loss
+    - maximum gravitational mass lost through neutrinos
+  - max_NS_mass
+    - maximum allowed neutron-star mass before classifying the remnant as a BH
+    - important science knob
+  - use_interp_values
+    - allow interpolated stellar quantities in the collapse calculation
+  - use_profiles
+    - allow full stellar profiles when available
+  - use_core_masses
+    - allow core masses to determine the outcome
+  - approx_at_he_depletion
+    - approximate required He-depletion quantities instead of using stored/calculated values
+
+- natal kicks inside step_SN
+  - kick
+    - turn natal kicks on/off
+  - kick_prescription
+    - distribution model: maxwellian, log_normal, asym_ej, linear
+  - kick_normalisation
+    - rescales the raw kick; options include fallback- or mass-dependent choices
+  - sigma_kick_CCSN_NS
+    - core-collapse NS kick dispersion
+  - mean_kick_CCSN_NS
+    - optional mean NS kick
+  - sigma_kick_CCSN_BH / mean_kick_CCSN_BH
+    - BH kick parameters
+  - sigma_kick_ECSN / mean_kick_ECSN
+    - electron-capture SN kick parameters
+  - no_kick_direct_collapse
+    - if True, direct-collapse BHs receive no natal kick
+  - very important for your project because kicks determine whether NS+MS binaries survive
+
+- step_dco
+  - evolves double compact objects: NS+NS, NS+BH, BH+BH
+  - gravitational radiation is normally on
+  - n_o_steps_history
+    - number of saved intermediate history points
+  - not central for detached Gaia NS+MS systems
+
+- step_end
+  - terminal evolution step
+  - no important science knobs
+
+- extra_hooks
+  - TimingHooks
+    - adds step timing information
+  - StepNamesHooks
+    - adds labels like step_HMS_HMS, step_CE, step_SN
+  - these produce the step_times and step_names columns you saw in the HDF5 output
+
+- grid_paths
+  - HMS_HMS_path
+  - CO_HMS_RLO_path
+  - CO_HeMS_path
+  - CO_HeMS_RLO_path
+  - single_HMS_path
+  - single_HeMS_path
+  - None means use the standard grids in PATH_TO_POSYDON_DATA
+  - only change if using custom MESA grids
+
+- BinaryPopulation_options
+  - optimize_ram
+    - save large populations in batches
+  - ram_per_cpu
+    - optional RAM limit
+  - dump_rate
+    - number of systems evolved before writing a batch
+  - temp_directory
+    - temporary batch directory
+  - tqdm
+    - progress bar
+  - breakdown_to_df
+    - convert evolved systems into DataFrames
+  - use_MPI
+    - MPI parallelism
+  - these are mostly computational knobs
+
+- metallicities
+  - metallicity values in units of solar metallicity
+  - [1.] = solar metallicity
+  - important science knob
+
+- error_checking_verbose / warnings_verbose
+  - extra diagnostics
+
+- history_verbose
+  - save extra internal POSYDON steps in the history table
+
+- entropy
+  - random-number-generator entropy / seed control
+  - NOT stellar thermodynamic entropy
+  - None uses system randomness
+
+- number_of_binaries
+  - number of systems to simulate
+
+- binary_fraction_scheme
+  - how the binary fraction is assigned
+  - options: const, Moe+17-massdependent
+  - important for absolute population normalization
+
+- binary_fraction_const
+  - constant binary fraction when binary_fraction_scheme = const
+
+- star_formation
+  - formation-time distribution
+  - options include burst, constant, and custom histories
+  - important when predicting the present-day Gaia population
+
+- max_simulation_time
+  - maximum age of the evolution, default about a Hubble time
+
+- read_samples_from_file
+  - empty = POSYDON draws its own initial systems
+  - filename = POSYDON reads your supplied initial M1, M2, P/separation, e
+  - this is how you could use your own population_prior.py sampler
+
+- primary_mass_scheme
+  - IMF for the primary
+  - options: Salpeter, Kroupa1993, Kroupa2001
+  - important science knob
+
+- primary_mass_min / primary_mass_max
+  - allowed primary ZAMS mass range
+  - must remain within grid coverage
+
+- secondary_mass_scheme
+  - how the companion mass / mass ratio is drawn
+  - options include flat_mass_ratio, q=1, Moe+17-PsandQs
+  - your current choice: Moe+17-PsandQs
+
+- secondary_mass_min / secondary_mass_max
+  - allowed secondary mass range
+
+- orbital_scheme
+  - choose period or separation as the orbital variable
+
+- orbital_period_scheme
+  - period distribution if orbital_scheme = period
+  - examples: Sana+12_period_extended, Moe+17-PsandQs
+  - your current choice: Moe+17-PsandQs
+
+- orbital_period_min / orbital_period_max
+  - allowed orbital-period range in days
+
+- orbital_separation_scheme
+  - used only if orbital_scheme = separation
+  - options include log_uniform and log_normal
+
+- orbital_separation_min / orbital_separation_max
+  - separation bounds
+
+- log_orbital_separation_mean / log_orbital_separation_sigma
+  - parameters of a log-normal separation distribution
+
+- eccentricity_scheme
+  - options: zero, thermal, uniform, Moe+17-PsandQs
+  - your current choice: Moe+17-PsandQs
+  - together with the Moe mass-ratio and period settings, this gives the correlated p(q,P,e|M1)
+
+- BinaryStar_output
+  - controls binary-level columns saved to the HDF5 history
+  - currently includes things like:
+    - state
+    - event
+    - time
+    - orbital_period
+    - eccentricity
+    - lg_mtransfer_rate
+    - step_names
+    - step_times
+  - commented entries are available but not currently saved
+  - potentially useful additions for your project:
+    - V_sys
+    - mass_transfer_case
+    - Roche-lobe-overflow diagnostics
+
+- SingleStar_1_output
+  - controls star-1 quantities saved to history
+  - currently saves:
+    - state
+    - mass
+    - log_R
+    - log_L
+    - lg_mdot
+    - he_core_mass / he_core_radius
+    - co_core_mass / co_core_radius
+    - center_h1 / center_he4
+    - surface_h1 / surface_he4
+    - surf_avg_omega_div_omega_crit
+    - spin
+  - many more quantities can be enabled if needed
+
+- SingleStar_1_output scalar_names
+  - one-value-per-system/star quantities stored mainly in oneline
+  - natal_kick_velocity / kick angles / mean anomaly
+  - spin_orbit_tilt_first_SN / second_SN
+  - f_fb
+    - fallback fraction
+  - SN_type
+  - h1_mass_ej / he4_mass_ej
+  - avg_c_in_c_core_at_He_depletion
+  - co_core_mass_at_He_depletion
+  - optional but currently commented:
+    - M4
+    - mu4
+    - Xi
+    - sc
+  - M4 and mu4 are especially useful for Patton&Sukhbold / Ertl-style explodability analysis
+
+- SingleStar_2_output
+  - same idea as SingleStar_1_output, but for star 2
+
+- main science knobs for your project
+  - initial population
+    - primary_mass_scheme
+    - primary_mass_min/max
+    - Moe+17-PsandQs settings
+    - binary fraction
+  - population history
+    - metallicities
+    - star_formation
+  - binary interaction
+    - common_envelope_efficiency
+    - lambda prescription
+    - optimistic/pessimistic HG treatment
+  - core collapse
+    - mechanism
+    - engine
+    - ECSN prescription
+    - max_NS_mass
+  - natal kicks
+    - kick_prescription
+    - kick_normalisation
+    - sigma_kick_CCSN_NS
+    - sigma_kick_ECSN
+    - no_kick_direct_collapse
+  - output
+    - which diagnostic columns you save
+
+- things to mostly leave alone initially
+  - flow chart
+  - interpolation method
+  - interpolation paths
+  - matching tolerances
+  - merger-track matching details
+  - grid paths
+  - low-level stop conditions
+  - verbose/debug options
+
+- your project pipeline
+  - initial binary population
+    - -> POSYDON binary evolution
+      - -> mass transfer / common envelope
+        - -> core collapse prescription
+          - -> NS or BH + natal kick
+            - -> surviving NS+MS population
+              - -> Gaia selection function
+                - -> likelihood / Bayes-factor comparison
