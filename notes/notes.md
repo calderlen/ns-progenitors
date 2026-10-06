@@ -18,40 +18,195 @@ you need to compute bayes factors
 (11) gaia detection/seleciton
 
 
+
+
+
 Ertl catalog covers steps (5)-(8)
 
 probability that a progenitor system would evolve into the type of system gaia would observe
 
 
-P(initial binary | M1_zams;  q = M_2,zams/M_1,zams; P_zams; e_zams) = P(M_1,zams) x P(q, P, e | M1_zams) = P(M_1,zams) x P(P | M_1,zams) x P ( q | M_1,zams; P) x P( e | M_1,zams, P) --- this is the population prior, so IMF x Moe P's&Q's
+P(initial binary | M1_zams, q_zams, P_zams, e_zams, Z)
+= P(M1_zams)
+x P(P_zams | M1_zams)
+x P(q_zams | M1_zams, P_zams)
+x P(e_zams | M1_zams, P_zams)
+
+where:
+q_zams = M2_zams / M1_zams
+
+initial parameters:
+M1_zams
+M2_zams
+q_zams
+P_zams
+a_zams
+e_zams
+Z
+
+--- population prior: IMF x Moe & Di Stefano P's & Q's
+
+
 x
-P(M_He, M_2, a_preSN, ... | M_1,zams, M_2,zams, a_zams) --- binary evolution, maybe POSYDON or some other binary evolution grid/code
+
+
+P(preSN state |
+  M1_zams, M2_zams, P_zams, e_zams, Z, H_binary)
+
+preSN outputs:
+M1_preSN
+M2_preSN
+M_He_init
+M_preSN
+M_CO
+M_Fe
+P_preSN
+a_preSN
+e_preSN
+state1_preSN
+state2_preSN
+
+H_binary includes:
+mass transfer
+common envelope
+winds
+angular momentum loss
+stellar evolution assumptions
+etc.
+
+--- binary evolution: POSYDON or another binary population synthesis model
+
+
 x
-P(M_NS | M_He, H_explosion) --- remnant model, Ertl
+
+
+P(CC outcome, M_rem,b, M_rem,g, M_fb, E_exp, t_exp |
+  M_He_init, M_preSN, M_CO, M_Fe, M4, mu4, xi_2.5, H_engine)
+
+CC outcome:
+NS
+fallback BH
+direct-collapse BH
+
+outputs:
+M_rem,b = final baryonic remnant mass
+M_rem,g = final gravitational remnant mass
+M_fb = fallback mass
+E_exp = explosion energy
+t_exp = explosion time
+
+for NS-forming systems:
+M_NS = M_rem,g
+
+H_engine:
+W18
+N20
+W20
+W15
+S19.8
+etc.
+
+--- core-collapse/remnant model: e.g. Ertl+20
+
+
 x
-P(bound | M_preSN, M_NS, M_2, a_preSN, v_k) --- physical selection, maybe need to do this on your own?
+
+
+P(postSN orbit, bound/disrupted |
+  M_preSN, M_rem,g, M2_preSN,
+  a_preSN, e_preSN,
+  v_k, theta_k, phi_k)
+
+postSN outputs:
+bound/disrupted
+P_postSN
+a_postSN
+e_postSN
+V_sys
+
+relevant inputs:
+M_preSN
+M_rem,g
+M2_preSN
+DeltaM_SN
+a_preSN
+e_preSN
+v_k
+theta_k
+phi_k
+
+--- SN orbital dynamics + natal kick selection; POSYDON can perform this
+
+
 x
-P(Gaia selection | M_NS, M_2, P, e, d, mag, ...) --- observational selection, probably don't need to do this on your own, but maybe.
 
 
+P(present-day NS+MS state |
+  M_NS, M2, P_postSN, e_postSN, age, H_binary)
 
-their model is build from five fitted quantities: (f_{logP;q>0.3}, gamma_smallq, gamma_largeq, F_twin, eta) all functions of M_1 and P.
+require:
+system remains bound
+one component is an NS
+companion is a luminous non-compact star
+system has not merged
+system has not evolved into an unwanted interacting state
+
+present-day outputs:
+M_NS
+M2
+P
+a
+e
+R2
+L2
+T_eff,2
+
+--- continued post-SN binary evolution to the present day
 
 
-
-P(M_1,zams) \propto case 1: M^-2.3 for M > 0.5 M_sun, and case 2:M^-1.3 for 0.08 M_sun < M < 0.5 M_sun -- this is the Chabrier IMF
-
-but obviously the IMF neq to today's galactic field mass distribution, because t_ms ~ 100Gyr*(M/M_sun)^-2.5
-
-so the present day mass function PDMF = IMF x SF history x stellar lifetimes x dynamical evolution
+x
 
 
+P(Galactic position and photometry |
+  l, b, d, A_G, M2, R2, L2, T_eff,2)
 
-then P's and Q's paper gives 
+outputs:
+l
+b
+d
+parallax
+A_G
+G_mag
 
-P(q,P,e | M_1,zams)
+--- Galactic placement + extinction + companion photometry
 
 
+x
+
+
+P(Gaia NSS selected |
+  ra, dec, parallax,
+  P, e,
+  M_NS, M2,
+  G_NS, G2)
+
+for NS+MS systems:
+G_NS is effectively negligible in the optical
+
+--- Gaia DR3 NSS astrometric-orbit selection: Lam+25
+
+
+x
+
+
+P(NS-candidate selected |
+  Gaia NSS selected,
+  inferred dark-companion mass,
+  orbital parameters,
+  luminous-star properties,
+  other candidate cuts)
+
+--- Gaia NS+MS candidate selection: El-Badry+24
 
 
 
