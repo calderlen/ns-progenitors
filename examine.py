@@ -1,27 +1,39 @@
+from pathlib import Path
+
 from posydon.popsyn.synthetic_population import Population
 
-pop = Population("1e+00_Zsun_population.h5")
 
-hist = pop.history[0]
+POPULATION_FILE = Path(__file__).resolve().parent / "outputs" / "1e+00_Zsun_population.h5"
 
-cols = [
-    "time",
-    "step_names",
-    "state",
-    "event",
-    "S1_state",
-    "S1_mass",
-    "S1_he_core_mass",
-    "S1_co_core_mass",
-    "S2_state",
-    "S2_mass",
-    "orbital_period",
-    "eccentricity",
-]
 
-print(hist[cols].to_string())
+def main():
+    pop = Population(str(POPULATION_FILE))
 
-print(pop.number_of_systems)
+    hist = pop.history[0]
+
+    cols = [
+        "time",
+        "step_names",
+        "state",
+        "event",
+        "S1_state",
+        "S1_mass",
+        "S1_he_core_mass",
+        "S1_co_core_mass",
+        "S2_state",
+        "S2_mass",
+        "orbital_period",
+        "eccentricity",
+    ]
+
+    print(hist[cols].to_string())
+
+    print(pop.number_of_systems)
+
+
+if __name__ == "__main__":
+    main()
+
 
 # oneline String columns: 
     # state_i,

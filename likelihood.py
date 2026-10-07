@@ -4,8 +4,9 @@ from scipy.stats import norm
 
 
 def object_loglikelihoods(data, errors, model, weights) -> np.ndarray:
-    # converting the inputs to numpy arrays
-    data, errors, model, weights = (np.asarray(values, dtype=float) for values in (observed, errors, model_masses, weights))
+    data, errors, model, weights = (
+        np.asarray(values, dtype=float) for values in (data, errors, model, weights)
+    )
     # selecting all positive weights
     positive = weights > 0
     # probability density of data D given model M 

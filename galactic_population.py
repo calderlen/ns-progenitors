@@ -7,9 +7,10 @@ import pyvo
 TAP_URL = "https://dc.g-vo.org/tap"
 TABLE = "gedr3mock.generated_data"
 COLUMNS = ["source_id", "ra", "dec", "l", "b", "parallax", "age", "feh", "popid", "a_g", "phot_g_mean_mag", "visibility_periods_used", "random_index"]
+MOCK_CSV = Path(__file__).resolve().parent / "outputs" / "gedr3mock_local.csv"
 
 
-def query_local_mock(n_rows=500_000, max_distance_kpc=2.0, cache_path="data/gedr3mock_local.csv", overwrite=False):
+def query_local_mock(n_rows=500_000, max_distance_kpc=2.0, cache_path=MOCK_CSV, overwrite=False):
     cache_path = Path(cache_path)
 
     if cache_path.exists() and not overwrite:

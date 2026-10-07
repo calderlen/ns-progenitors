@@ -1,7 +1,0 @@
-selection_item,criterion,analysis_implication,source_url
-parent_target_lists,Shahaf et al. 2023b; Andrews et al. 2022,Candidate pool from Gaia DR3 astrometric binaries,https://arxiv.org/abs/2405.00089
-G_magnitude,G < 15,Final sample completeness cut,https://arxiv.org/abs/2405.00089
-dark_companion_mass,best-fit M2 > 1.25 Msun,From joint astrometry+RV fitting; creates a hard low-mass truncation in the published sample,https://arxiv.org/abs/2405.00089
-astrometric_quality,not found spurious / not strongly underestimated uncertainties,Based on RV follow-up,https://arxiv.org/abs/2405.00089
-RV_phase_coverage,observed over at least half an orbit,Final sample inclusion requirement,https://arxiv.org/abs/2405.00089
-important_selection_note,masses selected from upper tail,Gaia-only inferred companion masses are expected to be biased high on average; joint RV+astrometry masses shift lower,https://arxiv.org/abs/2405.00089

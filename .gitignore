@@ -1,2 +1,6 @@
-/data/posydon
+/data/
 /dr3_nss_ast_orbits_selection
+/outputs/
+__pycache__/
+*.pyc
+.DS_Store
